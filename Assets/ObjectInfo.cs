@@ -11,16 +11,21 @@ public class ObjectInfo : MonoBehaviour {
 	//Health management
 	public int maxHealth = 100;
 	public int currentHealth;
+
+	public Vector3 lastPosition;
 	public HealthBar healthBar;
 
 	public DeathAnimation death;
 
 	private NavMeshAgent agent;
 
+	public ClientConnection connection;
+
+	public AnimationStateController animationStateController;
 	// Use this for initialization
 	void Start () {
+		lastPosition = gameObject.transform.position;
 		agent = GetComponent<NavMeshAgent>();
-
 		currentHealth = maxHealth;
 		healthBar.SetMaxHealth(maxHealth);
 	}
@@ -36,8 +41,21 @@ public class ObjectInfo : MonoBehaviour {
 		{
 			TakeDamage(20);
 		}
+
+		if (IsObjectMoving())
+        {
+			animationStateController.SetWalking(true);
+			//connection.SendPositionUpdates(gameObject);
+		} else
+        {
+			animationStateController.SetWalking(false);
+		}
+
+		lastPosition = gameObject.transform.position;
 	}
 
+	public bool IsObjectMoving() => gameObject.transform.position != lastPosition;
+  
 	public void RightClick()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -66,6 +84,6 @@ public class ObjectInfo : MonoBehaviour {
 
 	private void Die()
 	{
-		death.StartRotation();
+		animationStateController.SetDying(true);
 	}
 }
