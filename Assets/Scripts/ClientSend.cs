@@ -27,11 +27,15 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void UDPTestReceived()
+    public static void UnitUpdate(int unitId, int currentHealth, Vector3 position, Quaternion rotation)
     {
-        using (Packet _packet = new Packet ((int) ClientPackets.udpTestReceive))
+        using (Packet _packet = new Packet((int)ClientPackets.unitUpdate))
         {
-            _packet.Write("Received a UDP packet.");
+            _packet.Write(unitId);
+            _packet.Write(currentHealth);
+            _packet.Write(position);
+            _packet.Write(rotation);
+
             SendUDPData(_packet);
         }
     }

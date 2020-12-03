@@ -26,8 +26,8 @@ public class InputManager : MonoBehaviour {
 
 	private Vector2 startPos;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 		rotation = Camera.main.transform.rotation;
 
@@ -76,12 +76,7 @@ public class InputManager : MonoBehaviour {
 			}
 			else if (hit.collider.tag == "Selectable")
 			{
-				selectedObject = hit.collider.gameObject;
-				selectedInfo = selectedObject.GetComponent<ObjectInfo>();
-
-				selectedInfo.isSelected = true;
-
-				Debug.Log("Selected" + selectedInfo.objectName);
+				SelectUnit(hit.collider.gameObject);
 			}
 		}
 
@@ -128,8 +123,6 @@ public class InputManager : MonoBehaviour {
 
 		selectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
 		selectionBox.anchoredPosition = startPos + new Vector2(width / 2, height / 2);
-
-		Rect container = new Rect(startPos.x, startPos.y, width, height);
     }
 
 	void ReleaseSelectionBox()
@@ -146,7 +139,7 @@ public class InputManager : MonoBehaviour {
 
 			if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
 			{
-				unit.GetComponent<ObjectInfo>().isSelected = true;
+				SelectUnit(unit);
 			}
 		}
 	}
@@ -166,7 +159,14 @@ public class InputManager : MonoBehaviour {
 			Camera.main.transform.eulerAngles = Vector3.MoveTowards(origin, destination, Time.deltaTime * rotateSpeed);
 		}
 	}
-
+	void SelectUnit(GameObject unit)
+    {
+		if (unit.GetComponent<ObjectInfo>().isLocalPlayerUnit)
+		{
+			selectedInfo = unit.GetComponent<ObjectInfo>();
+			unit.GetComponent<ObjectInfo>().isSelected = true;
+		}
+	}
 	void DeselectAll()
 	{
 		units = GameObject.FindGameObjectsWithTag("Selectable");

@@ -6,6 +6,10 @@ using UnityEngine.AI;
 public class ObjectInfo : MonoBehaviour {
 
 	public bool isSelected = false;
+
+	private static int _globalId = 1;
+	public int id = 0;
+
 	public string objectName;
 	public GameObject selectionIndicator;
 	//Health management
@@ -15,15 +19,19 @@ public class ObjectInfo : MonoBehaviour {
 	public Vector3 lastPosition;
 	public HealthBar healthBar;
 
-	public DeathAnimation death;
+	public bool isLocalPlayerUnit = false;
 
 	private NavMeshAgent agent;
 
-	public ClientConnection connection;
-
 	public AnimationStateController animationStateController;
-	// Use this for initialization
-	void Start () {
+
+    private void Awake()
+    {
+		id = _globalId++;
+    }
+
+    // Use this for initialization
+    void Start () {
 		lastPosition = gameObject.transform.position;
 		agent = GetComponent<NavMeshAgent>();
 		currentHealth = maxHealth;
@@ -39,6 +47,8 @@ public class ObjectInfo : MonoBehaviour {
 		{
 			RightClick();
 		}
+
+		//testing
 		if (Input.GetKeyDown(KeyCode.K))
 		{
 			TakeDamage(20);
@@ -47,7 +57,7 @@ public class ObjectInfo : MonoBehaviour {
 		if (IsObjectMoving())
         {
 			animationStateController.SetWalking(true);
-			//connection.SendPositionUpdates(gameObject);
+			ClientSend.UnitUpdate(id, currentHealth, gameObject.transform.position, gameObject.transform.rotation);
 		} else
         {
 			animationStateController.SetWalking(false);
