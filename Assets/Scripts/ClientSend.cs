@@ -27,16 +27,35 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void UnitUpdate(int unitId, int currentHealth, Vector3 position, Quaternion rotation)
+    public static void UnitPositionUpdate(int unitId, Vector3 position, Quaternion rotation)
     {
-        using (Packet _packet = new Packet((int)ClientPackets.unitUpdate))
+        using (Packet _packet = new Packet((int)ClientPackets.unitPositionUpdate))
         {
             _packet.Write(unitId);
-            _packet.Write(currentHealth);
             _packet.Write(position);
             _packet.Write(rotation);
 
             SendUDPData(_packet);
+        }
+    }
+    
+    public static void UnitHealthPointsUpdate(int _unitId, int _currentHealthPoints)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.unitHPUpdate))
+        {
+            _packet.Write(_unitId);
+            _packet.Write(_currentHealthPoints);
+            SendTCPData(_packet);
+        }
+    }    
+    public static void UnitAttack(int _unitId, int _targetId, int _targetPlayerId)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.unitAttack))
+        {
+            _packet.Write(_unitId);
+            _packet.Write(_targetId);
+            _packet.Write(_targetPlayerId);
+            SendTCPData(_packet);
         }
     }
 }

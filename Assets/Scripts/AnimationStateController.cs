@@ -40,10 +40,13 @@ public class AnimationStateController : MonoBehaviour
             animator.SetBool("IsAttacking", isAttacking);
         }
     }
-
-    public void SetDying(bool isDying)
+    public void SetAttack()
     {
-        animator.SetBool("IsDying", isDying);
+        animator.SetTrigger("Attacks");
+    }
+    public void SetDies()
+    {
+        animator.SetTrigger("Dies");
     }
 
 }

@@ -241,7 +241,7 @@ public class ClientConnection : MonoBehaviour
                 using (Packet _packet = new Packet(_data))
                 {
                     int _packetId = _packet.ReadInt();
-                packetHandlers[_packetId](_packet);
+                    packetHandlers[_packetId](_packet);
                 }
             });
         }
@@ -253,7 +253,9 @@ public class ClientConnection : MonoBehaviour
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
             { (int)ServerPackets.spawnPlayer, ClientHandle.SpawnPlayer },
             { (int)ServerPackets.spawnUnit, ClientHandle.SpawnUnit },
-            { (int)ServerPackets.unitUpdate, ClientHandle.UpdateUnit }
+            { (int)ServerPackets.unitPositionUpdate, ClientHandle.UpdatePositionUnit },
+            { (int)ServerPackets.unitHPUpdate, ClientHandle.UpdateHealthPointsUnit },
+            { (int)ServerPackets.unitAttack, ClientHandle.UnitAttack }
         };
 
         Debug.Log("Initialised client data");

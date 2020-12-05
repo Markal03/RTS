@@ -41,20 +41,67 @@ public class ClientHandle : MonoBehaviour
         
         
     }
-    public static void UpdateUnit(Packet _packet)
+    public static void UpdatePositionUnit(Packet _packet)
     {
         int _playerId = _packet.ReadInt();
         int _unitId = _packet.ReadInt();
-        int _health = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
         Quaternion _rotation = _packet.ReadQuaternion();
 
-        GameObject unit = GameManager.players[_playerId].units
-            .Where(u => u.GetComponent<ObjectInfo>().id == _unitId)
-            .FirstOrDefault();
+        GameObject unit = GetUnit(_playerId, _unitId);
 
-        unit.GetComponent<ObjectInfo>().currentHealth = _health;
-        unit.transform.position = _position;
-        unit.transform.rotation = _rotation;
+        if (!(unit is null))
+        {
+            unit.transform.position = _position;
+            unit.transform.rotation = _rotation;
+        }
+
     }
+    
+    public static void UpdateHealthPointsUnit(Packet _packet)
+    {
+        int _playerId = _packet.ReadInt();
+        int _unitId = _packet.ReadInt();
+        int _healthPoints = _packet.ReadInt();
+
+        GameObject unit = GetUnit(_playerId, _unitId);
+
+        if (!(unit is null))
+        {
+            unit.GetComponent<ObjectInfo>().currentHealth = _healthPoints;
+        }
+
+    }
+
+    public static void UnitAttack(Packet _packet)
+    {
+
+        int _playerId = _packet.ReadInt();
+        int _unitId = _packet.ReadInt();        
+        int _targetPlayerId = _packet.ReadInt();
+        int _targetUnitId = _packet.ReadInt();
+
+        GameObject _unit = GetUnit(_playerId, _unitId);
+        GameObject _target = GetUnitIncludingLocalUnits(_targetPlayerId, _targetUnitId);
+
+        if (!(_unit is null) && !(_target is null))
+        {
+            _unit.GetComponent<ObjectInfo>().Attack(_target, false);
+        }
+
+    }
+
+    private static GameObject GetUnit(int _playerId, int _unitId) 
+        => GameManager.players[_playerId].units
+        .Where(u =>
+        u.GetComponent<ObjectInfo>().id == _unitId &&
+        u.GetComponent<ObjectInfo>().isLocalPlayerUnit != true)
+        .FirstOrDefault();
+    
+    private static GameObject GetUnitIncludingLocalUnits(int _playerId, int _unitId) 
+        => GameManager.players[_playerId].units
+        .Where(u =>
+        u.GetComponent<ObjectInfo>().id == _unitId)
+        .FirstOrDefault();
+
 }

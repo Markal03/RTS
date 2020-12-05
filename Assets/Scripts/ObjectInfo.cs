@@ -7,17 +7,10 @@ public class ObjectInfo : MonoBehaviour {
 
 	public bool isSelected = false;
 
-	private static int _globalId = 1;
 	public int id = 0;
 
 	public string objectName;
 	public GameObject selectionIndicator;
-	//Health management
-	public int maxHealth = 100;
-	public int currentHealth;
-
-	public Vector3 lastPosition;
-	public HealthBar healthBar;
 
 	public bool isLocalPlayerUnit = false;
 
@@ -25,9 +18,26 @@ public class ObjectInfo : MonoBehaviour {
 
 	public AnimationStateController animationStateController;
 
+	private GameObject attackTarget;
+
+	public Vector3 lastPosition;
+	public HealthBar healthBar;
+
+	public float lastAttackTime;
+	//Stats
+	public int maxHealth = 100;
+	public int currentHealth;
+	public float attackRange = 1.5f;
+	public float attackSpeed = 1.5f;
+	public float attackDamage = 10f;
+
+
+
+
     private void Awake()
     {
-		id = _globalId++;
+		attackTarget = null;
+		lastAttackTime = attackSpeed;
     }
 
     // Use this for initialization
@@ -57,16 +67,39 @@ public class ObjectInfo : MonoBehaviour {
 		if (IsObjectMoving())
         {
 			animationStateController.SetWalking(true);
-			ClientSend.UnitUpdate(id, currentHealth, gameObject.transform.position, gameObject.transform.rotation);
+			if(isLocalPlayerUnit)
+			ClientSend.UnitPositionUpdate(id, gameObject.transform.position, gameObject.transform.rotation);
 		} else
         {
 			animationStateController.SetWalking(false);
 		}
 
+		if(CanAttack())
+        {
+			if (lastAttackTime < attackSpeed)
+            {
+				lastAttackTime += Time.deltaTime;
+            }
+			else
+            {
+				Attack(attackTarget);
+				lastAttackTime = 0;
+            }
+        }
+
 		lastPosition = gameObject.transform.position;
 	}
 
 	public bool IsObjectMoving() => gameObject.transform.position != lastPosition;
+	public bool CanAttack()
+	{
+
+		if (attackTarget is null) return false;
+
+		var distance = Vector3.Distance(this.transform.position, attackTarget.transform.position);
+
+		return distance <= attackRange;
+	}
   
 	public void RightClick()
 	{
@@ -75,17 +108,38 @@ public class ObjectInfo : MonoBehaviour {
 
 		if (Physics.Raycast(ray, out hit, 100))
 		{
-			if (hit.collider.tag == "Ground")
+			if (hit.collider.CompareTag("Ground"))
 			{
 				agent.destination = hit.point;
+				attackTarget = null;
 				Debug.Log("Moving");
-			}
+			} 
+			else if (hit.collider.CompareTag("Selectable"))
+            {
+				agent.destination = hit.collider.gameObject.transform.position;
+
+				if (hit.collider.CompareTag("Selectable") && !hit.collider.gameObject.GetComponent<ObjectInfo>().isLocalPlayerUnit)
+                {
+					attackTarget = hit.collider.gameObject;
+				}
+
+            }
 		}
 	}
 
-	void TakeDamage(int damage)
+	public void Attack(GameObject _target, bool sendUpdate = true)
+    {
+		if (sendUpdate == true)
+        {
+			ClientSend.UnitAttack(id, _target.GetComponent<ObjectInfo>().id, _target.GetComponentInParent<PlayerManager>().id);
+		}
+
+		animationStateController.SetAttack();
+		_target.GetComponent<ObjectInfo>().TakeDamage((int) attackDamage);
+    }
+	void TakeDamage(int _damage)
 	{
-		currentHealth -= damage;
+		currentHealth -= _damage;
 		healthBar.SetHealth(currentHealth);
 
 		if (currentHealth <= 0 )
@@ -93,9 +147,9 @@ public class ObjectInfo : MonoBehaviour {
 			Die();
 		}
 	}
-
-	private void Die()
+    private void Die()
 	{
-		animationStateController.SetDying(true);
+		//remove object
+		animationStateController.SetDies();
 	}
 }

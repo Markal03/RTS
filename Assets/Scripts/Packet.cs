@@ -9,7 +9,9 @@ public enum ServerPackets
     welcome = 1,
     spawnPlayer,
     spawnUnit,
-    unitUpdate,
+    unitPositionUpdate,
+    unitHPUpdate,
+    unitAttack,
     udpTest
 }
 
@@ -17,7 +19,9 @@ public enum ServerPackets
 public enum ClientPackets
 {
     welcomeReceived = 1,
-    unitUpdate
+    unitPositionUpdate,
+    unitHPUpdate,
+    unitAttack
 }
 
 public class Packet : IDisposable
