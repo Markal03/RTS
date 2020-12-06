@@ -386,12 +386,17 @@ MonoBehaviour:
   id: 0
   objectName: Unit
   selectionIndicator: {fileID: 0}
-  maxHealth: 100
-  currentHealth: 0
-  lastPosition: {x: 0, y: 0, z: 0}
-  healthBar: {fileID: 581065049}
   isLocalPlayerUnit: 0
   animationStateController: {fileID: 0}
+  lastPosition: {x: 0, y: 0, z: 0}
+  totalPositionUpdates: 0
+  healthBar: {fileID: 581065049}
+  lastAttackTime: 0
+  maxHealth: 100
+  currentHealth: 0
+  attackRange: 1.5
+  attackSpeed: 1.5
+  attackDamage: 10
 --- !u!195 &344174377
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -556,8 +561,10 @@ MonoBehaviour:
     type: 3}
   localUnitPrefab: {fileID: 3768817089419795961, guid: 34e9063e659392b4c86b935d080ba3cb,
     type: 3}
-  unitPrefab: {fileID: 3768817089419795961, guid: b70f7a0dc3a8ccb46b49fd2367fb1166,
-    type: 3}
+  unitPrefabs:
+  - {fileID: 3768817089419795961, guid: b70f7a0dc3a8ccb46b49fd2367fb1166, type: 3}
+  - {fileID: 3768817089419795961, guid: 491b6e100d271724c9bef039b6c11888, type: 3}
+  - {fileID: 3768817089419795961, guid: 368ea27812c60a44c91d9ccecb8f728a, type: 3}
 --- !u!4 &471760601
 Transform:
   m_ObjectHideFlags: 0

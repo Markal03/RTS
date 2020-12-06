@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
 
-	public float panSpeed;
+	public float panSpeed = 20f;
 	public float rotateSpeed;
 	public float rotateAmount;
 
@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour {
 	void Update () {
 		
 		MoveCamera();
-		RotateCamera();
+		//RotateCamera();
 
 		if (Input.GetMouseButtonDown(0))
 		{

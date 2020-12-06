@@ -4,6 +4,7 @@ using System.Net;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ClientHandle : MonoBehaviour
 {
@@ -47,14 +48,21 @@ public class ClientHandle : MonoBehaviour
         int _unitId = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
         Quaternion _rotation = _packet.ReadQuaternion();
+        float _time = _packet.ReadFloat();
 
         GameObject unit = GetUnit(_playerId, _unitId);
 
         if (!(unit is null))
         {
-            unit.transform.position = _position;
+            unit.GetComponent<NavMeshAgent>().destination = _position; //uses AI instead of prediction to run smoother
+            //unit.transform.position = _position;
             unit.transform.rotation = _rotation;
+
+            unit.GetComponent<ObjectInfo>().lastReceivedPositions[unit.GetComponent<ObjectInfo>().totalPositionUpdates % 3] = new UpdatePositionPacket(_time, _position);
+            unit.GetComponent<ObjectInfo>().totalPositionUpdates++;
         }
+
+
 
     }
     
@@ -94,6 +102,8 @@ public class ClientHandle : MonoBehaviour
     private static GameObject GetUnit(int _playerId, int _unitId) 
         => GameManager.players[_playerId].units
         .Where(u =>
+        u != null &&
+        u.activeInHierarchy &&
         u.GetComponent<ObjectInfo>().id == _unitId &&
         u.GetComponent<ObjectInfo>().isLocalPlayerUnit != true)
         .FirstOrDefault();
@@ -101,6 +111,8 @@ public class ClientHandle : MonoBehaviour
     private static GameObject GetUnitIncludingLocalUnits(int _playerId, int _unitId) 
         => GameManager.players[_playerId].units
         .Where(u =>
+        u != null &&
+        u.activeInHierarchy &&
         u.GetComponent<ObjectInfo>().id == _unitId)
         .FirstOrDefault();
 

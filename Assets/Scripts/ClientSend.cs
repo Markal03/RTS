@@ -34,7 +34,7 @@ public class ClientSend : MonoBehaviour
             _packet.Write(unitId);
             _packet.Write(position);
             _packet.Write(rotation);
-
+            _packet.Write(Time.time);
             SendUDPData(_packet);
         }
     }
@@ -48,13 +48,14 @@ public class ClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }    
-    public static void UnitAttack(int _unitId, int _targetId, int _targetPlayerId)
+    public static void UnitAttack(int _unitId, int _targetId, int _targetPlayerId, int _attackDamage)
     {
         using (Packet _packet = new Packet((int)ClientPackets.unitAttack))
         {
             _packet.Write(_unitId);
             _packet.Write(_targetId);
             _packet.Write(_targetPlayerId);
+            _packet.Write(_attackDamage);
             SendTCPData(_packet);
         }
     }

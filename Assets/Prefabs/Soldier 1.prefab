@@ -807,7 +807,7 @@ GameObject:
   - component: {fileID: 799447804865070659}
   - component: {fileID: 5152925530815713705}
   m_Layer: 0
-  m_Name: Soldier
+  m_Name: Soldier 1
   m_TagString: Selectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1032,7 +1032,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9783f60b54c914245a6e43170cc846e1, type: 2}
+  - {fileID: 2100000, guid: 4c28ecf038f54fd4eb4cc536ff1bd4c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1149,7 +1149,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9783f60b54c914245a6e43170cc846e1, type: 2}
+  - {fileID: 2100000, guid: 4c28ecf038f54fd4eb4cc536ff1bd4c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

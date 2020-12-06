@@ -11,8 +11,7 @@ public enum ServerPackets
     spawnUnit,
     unitPositionUpdate,
     unitHPUpdate,
-    unitAttack,
-    udpTest
+    unitAttack
 }
 
 /// <summary>Sent from client to server.</summary>

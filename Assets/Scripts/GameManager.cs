@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
 
     public GameObject localUnitPrefab;
-    public GameObject unitPrefab;
+    public GameObject [] unitPrefabs;
 
     private void Awake()
     {
@@ -56,17 +56,26 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _unit = Instantiate(unitPrefab, _position, _rotation);
+            _unit = Instantiate(GetUnitPrefab(_id), _position, _rotation);
         }
 
         _unit.GetComponent<ObjectInfo>().id = _unitId;
         _unit.GetComponent<ObjectInfo>().currentHealth = _health;
         _unit.GetComponent<ObjectInfo>().maxHealth = _health;
-
         players[_id].GetComponent<PlayerManager>().units[_unitId] = _unit;
         _unit.transform.parent = players[_id].GetComponent<PlayerManager>().gameObject.transform;
     }
 
+    public GameObject GetUnitPrefab(int _playerId)
+    {
+        switch(_playerId)
+        {
+            case 2: return unitPrefabs[0];
+            case 3: return unitPrefabs[1];
+            case 4: return unitPrefabs[2];
+            default: return unitPrefabs[0];
+        }
+    }
     //private void SpawnUnits(GameObject _player)
     //{
 

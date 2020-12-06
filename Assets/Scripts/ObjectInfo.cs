@@ -21,6 +21,9 @@ public class ObjectInfo : MonoBehaviour {
 	private GameObject attackTarget;
 
 	public Vector3 lastPosition;
+	public Dictionary<int , UpdatePositionPacket> lastReceivedPositions = new Dictionary<int, UpdatePositionPacket>(); //contains the last 3 position updates
+
+	public int totalPositionUpdates = 0;
 	public HealthBar healthBar;
 
 	public float lastAttackTime;
@@ -30,7 +33,6 @@ public class ObjectInfo : MonoBehaviour {
 	public float attackRange = 1.5f;
 	public float attackSpeed = 1.5f;
 	public float attackDamage = 10f;
-
 
 
 
@@ -53,6 +55,11 @@ public class ObjectInfo : MonoBehaviour {
 
 		selectionIndicator.SetActive(isSelected);
 
+		if (!(attackTarget is null) && attackTarget.GetComponent<ObjectInfo>().currentHealth < 1)
+        {
+			attackTarget = null;
+        } 
+
 		if (Input.GetMouseButtonDown(1) && isSelected)
 		{
 			RightClick();
@@ -67,11 +74,15 @@ public class ObjectInfo : MonoBehaviour {
 		if (IsObjectMoving())
         {
 			animationStateController.SetWalking(true);
-			if(isLocalPlayerUnit)
-			ClientSend.UnitPositionUpdate(id, gameObject.transform.position, gameObject.transform.rotation);
+
+			if (isLocalPlayerUnit)
+				ClientSend.UnitPositionUpdate(id, gameObject.transform.position, gameObject.transform.rotation);
+			//else RunPrediction();
+
 		} else
         {
 			animationStateController.SetWalking(false);
+			lastReceivedPositions.Clear();
 		}
 
 		if(CanAttack())
@@ -103,11 +114,16 @@ public class ObjectInfo : MonoBehaviour {
   
 	public void RightClick()
 	{
+
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 
 		if (Physics.Raycast(ray, out hit, 100))
 		{
+			animationStateController.enabled = false;
+			gameObject.transform.LookAt(hit.collider.gameObject.transform.position);
+			animationStateController.enabled = true;
+
 			if (hit.collider.CompareTag("Ground"))
 			{
 				agent.destination = hit.point;
@@ -124,19 +140,21 @@ public class ObjectInfo : MonoBehaviour {
 				}
 
             }
+
 		}
 	}
 
-	public void Attack(GameObject _target, bool sendUpdate = true)
+	public void Attack(GameObject _target, bool _sendUpdate = true)
     {
-		if (sendUpdate == true)
+		if (_sendUpdate == true)
         {
-			ClientSend.UnitAttack(id, _target.GetComponent<ObjectInfo>().id, _target.GetComponentInParent<PlayerManager>().id);
+			ClientSend.UnitAttack(id, _target.GetComponent<ObjectInfo>().id, _target.GetComponentInParent<PlayerManager>().id, (int) attackDamage);
 		}
 
 		animationStateController.SetAttack();
 		_target.GetComponent<ObjectInfo>().TakeDamage((int) attackDamage);
     }
+
 	void TakeDamage(int _damage)
 	{
 		currentHealth -= _damage;
@@ -147,9 +165,65 @@ public class ObjectInfo : MonoBehaviour {
 			Die();
 		}
 	}
+
     private void Die()
 	{
-		//remove object
 		animationStateController.SetDies();
+		Invoke("RemoveObject", 2);
 	}
+
+	private void RemoveObject()
+    {
+		Destroy(gameObject);
+	}
+
+	private void RunPrediction()
+    {
+		float predictedX = -1.0f;
+		float predictedY = -1.0f;
+		float predictedZ = -1.0f;
+
+		int size = lastReceivedPositions.Count;
+
+		if (size < 3)
+        {
+			//unsufficient data to run prediction
+        } else
+        {
+			UpdatePositionPacket packet0 = lastReceivedPositions[0];
+			UpdatePositionPacket packet1 = lastReceivedPositions[1];
+			UpdatePositionPacket packet2 = lastReceivedPositions[2];
+
+			predictedX = packet0.position.x;
+			predictedY = packet0.position.y;
+			predictedZ = packet0.position.z;
+
+			Vector3 velocity;
+			Vector3 distanceBetweenLastMessages;
+			float timeBetweenLastMessages;
+
+			distanceBetweenLastMessages.x = packet0.position.x - packet1.position.x;
+			distanceBetweenLastMessages.z = packet0.position.z - packet1.position.z;
+			distanceBetweenLastMessages.y = 0;
+
+			timeBetweenLastMessages = packet0.time - packet1.time;
+
+			velocity = distanceBetweenLastMessages / timeBetweenLastMessages;
+
+			Vector3 lastPosition = new Vector3(packet0.position.x, packet0.position.y, packet0.position.z);
+
+			Vector3 displacement;
+
+			displacement.x = velocity.x * (packet1.time - packet0.time);
+			displacement.z = velocity.z * (packet1.time - packet0.time);
+
+			predictedX = lastPosition.x + displacement.x;
+			predictedZ = lastPosition.z + displacement.z;
+
+			Vector3 predictedPosition = new Vector3(predictedX, predictedY, predictedZ);
+			gameObject.transform.position = predictedPosition;
+
+        }
+
+    }
 }
