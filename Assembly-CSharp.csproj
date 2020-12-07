@@ -67,12 +67,11 @@
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\ObjectInfo.cs" />
     <Compile Include="Assets\Scripts\Billboard.cs" />
+    <Compile Include="Assets\Scripts\CursorController.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\ClientConnection.cs" />
     <Compile Include="Assets\Scripts\Packet.cs" />
-    <Compile Include="Assets\Scripts\Client.cs" />
     <Compile Include="Assets\Scripts\ClientSend.cs" />
-    <Compile Include="Assets\Scripts\CursorController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Samples\Terrain Tools\0.1.0-preview\Terrain Assets\ThirdPartyNotices.txt" />
