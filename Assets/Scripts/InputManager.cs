@@ -165,6 +165,7 @@ public class InputManager : MonoBehaviour {
 		{
 			selectedInfo = unit.GetComponent<ObjectInfo>();
 			unit.GetComponent<ObjectInfo>().isSelected = true;
+			GameManager.players[1].isUnitSelected = true;
 		}
 	}
 	void DeselectAll()
@@ -174,6 +175,7 @@ public class InputManager : MonoBehaviour {
 		foreach (GameObject unit in units)
 		{
 			unit.GetComponent<ObjectInfo>().isSelected = false;
+			unit.GetComponentInParent<PlayerManager>().isUnitSelected = false;
 		}
 	}
 

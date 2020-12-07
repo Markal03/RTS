@@ -101,7 +101,19 @@ public class ObjectInfo : MonoBehaviour {
 		lastPosition = gameObject.transform.position;
 	}
 
-	public bool IsObjectMoving() => gameObject.transform.position != lastPosition;
+    private void OnMouseEnter()
+    {
+		if(!isLocalPlayerUnit && GameManager.players[1].isUnitSelected == true)
+			CursorController.instance.ActivateAttackCursor();
+    } 
+	
+	private void OnMouseExit()
+    {
+		if (!isLocalPlayerUnit)
+			CursorController.instance.ActivateDefaultCursor();
+    }
+
+    public bool IsObjectMoving() => gameObject.transform.position != lastPosition;
 	public bool CanAttack()
 	{
 

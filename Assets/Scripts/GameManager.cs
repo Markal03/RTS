@@ -76,45 +76,5 @@ public class GameManager : MonoBehaviour
             default: return unitPrefabs[0];
         }
     }
-    //private void SpawnUnits(GameObject _player)
-    //{
-
-    //    int _totalUnitCount = 0;
-
-    //    for (int i = 0; i < 2; i++)
-    //    {
-    //        for (int j = 0; j < 5; j++)
-    //        {
-    //            _totalUnitCount++;
-    //            _player.GetComponent<PlayerManager>().units[_totalUnitCount] = SpawnUnit(_player, i, j);
-    //        }
-
-    //    }
-    //}
-
-
-
-    //public GameObject SpawnUnit(GameObject _player, int row, int column)
-    //{
-
-    //    Vector3 _position = _player.transform.position;
-    //    Quaternion _rotation = _player.transform.rotation;
-    //    GameObject _unit;
-
-    //    _position.x = 2.0f * (column - 2);
-    //    _position.y = 0.5f;
-    //    _position.z = 4.0f * (row - 1);
-
-    //    if (_player.GetComponent<PlayerManager>().id == ClientConnection.instance.myId)
-    //    {
-    //        _unit = Instantiate(localUnitPrefab, _position, _rotation);
-    //    }
-    //    else
-    //    {
-    //        _unit = Instantiate(unitPrefab, _position, _rotation);
-    //    }
-
-    //    return _unit;
-    //}
 
 }
