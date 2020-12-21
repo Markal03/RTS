@@ -18,10 +18,9 @@ public class ObjectInfo : MonoBehaviour {
 
 	public AnimationStateController animationStateController;
 
-	private GameObject attackTarget;
+	public GameObject attackTarget;
 
 	public Vector3 lastPosition;
-	public Dictionary<int , UpdatePositionPacket> lastReceivedPositions = new Dictionary<int, UpdatePositionPacket>(); //contains the last 3 position updates
 
 	public int totalPositionUpdates = 0;
 	public HealthBar healthBar;
@@ -55,10 +54,10 @@ public class ObjectInfo : MonoBehaviour {
 
 		selectionIndicator.SetActive(isSelected);
 
-		if (!(attackTarget is null) && attackTarget.GetComponent<ObjectInfo>().currentHealth < 1)
-        {
-			attackTarget = null;
-        } 
+		//if (!(attackTarget is null) && attackTarget.GetComponent<ObjectInfo>().currentHealth < 1)
+  //      {
+		//	attackTarget = null;
+  //      } 
 
 		if (Input.GetMouseButtonDown(1) && isSelected)
 		{
@@ -75,14 +74,10 @@ public class ObjectInfo : MonoBehaviour {
         {
 			animationStateController.SetWalking(true);
 
-			if (isLocalPlayerUnit)
-				ClientSend.UnitPositionUpdate(id, gameObject.transform.position, gameObject.transform.rotation);
-			//else RunPrediction();
 
 		} else
         {
 			animationStateController.SetWalking(false);
-			lastReceivedPositions.Clear();
 		}
 
 		if(CanAttack())
@@ -93,8 +88,8 @@ public class ObjectInfo : MonoBehaviour {
             }
 			else
             {
-				Attack(attackTarget);
-				lastAttackTime = 0;
+					Attack(attackTarget);
+					lastAttackTime = 0;
             }
         }
 
@@ -142,11 +137,11 @@ public class ObjectInfo : MonoBehaviour {
 				attackTarget = null;
 				Debug.Log("Moving");
 			} 
-			else if (hit.collider.CompareTag("Selectable"))
+			else if (hit.collider.CompareTag("Seeker"))
             {
 				agent.destination = hit.collider.gameObject.transform.position;
 
-				if (hit.collider.CompareTag("Selectable") && !hit.collider.gameObject.GetComponent<ObjectInfo>().isLocalPlayerUnit)
+				if (hit.collider.CompareTag("Seeker") && !hit.collider.gameObject.GetComponent<ObjectInfo>().isLocalPlayerUnit)
                 {
 					attackTarget = hit.collider.gameObject;
 				}
@@ -158,10 +153,6 @@ public class ObjectInfo : MonoBehaviour {
 
 	public void Attack(GameObject _target, bool _sendUpdate = true)
     {
-		if (_sendUpdate == true)
-        {
-			ClientSend.UnitAttack(id, _target.GetComponent<ObjectInfo>().id, _target.GetComponentInParent<PlayerManager>().id, (int) attackDamage);
-		}
 
 		animationStateController.SetAttack();
 		_target.GetComponent<ObjectInfo>().TakeDamage((int) attackDamage);
@@ -186,56 +177,20 @@ public class ObjectInfo : MonoBehaviour {
 
 	private void RemoveObject()
     {
+
+		var objectInfos = FindObjectsOfType<ObjectInfo>();
+		foreach(ObjectInfo oi in objectInfos)
+        {
+			if (oi.attackTarget == gameObject)
+				oi.attackTarget = null;
+        }
+
 		Destroy(gameObject);
 	}
 
-	private void RunPrediction()
+	public void SetAttackTarget(GameObject _target)
     {
-		float predictedX = -1.0f;
-		float predictedY = -1.0f;
-		float predictedZ = -1.0f;
-
-		int size = lastReceivedPositions.Count;
-
-		if (size < 3)
-        {
-			//unsufficient data to run prediction
-        } else
-        {
-			UpdatePositionPacket packet0 = lastReceivedPositions[0];
-			UpdatePositionPacket packet1 = lastReceivedPositions[1];
-			UpdatePositionPacket packet2 = lastReceivedPositions[2];
-
-			predictedX = packet0.position.x;
-			predictedY = packet0.position.y;
-			predictedZ = packet0.position.z;
-
-			Vector3 velocity;
-			Vector3 distanceBetweenLastMessages;
-			float timeBetweenLastMessages;
-
-			distanceBetweenLastMessages.x = packet0.position.x - packet1.position.x;
-			distanceBetweenLastMessages.z = packet0.position.z - packet1.position.z;
-			distanceBetweenLastMessages.y = 0;
-
-			timeBetweenLastMessages = packet0.time - packet1.time;
-
-			velocity = distanceBetweenLastMessages / timeBetweenLastMessages;
-
-			Vector3 lastPosition = new Vector3(packet0.position.x, packet0.position.y, packet0.position.z);
-
-			Vector3 displacement;
-
-			displacement.x = velocity.x * (packet1.time - packet0.time);
-			displacement.z = velocity.z * (packet1.time - packet0.time);
-
-			predictedX = lastPosition.x + displacement.x;
-			predictedZ = lastPosition.z + displacement.z;
-
-			Vector3 predictedPosition = new Vector3(predictedX, predictedY, predictedZ);
-			gameObject.transform.position = predictedPosition;
-
-        }
-
+		attackTarget = _target;
     }
+
 }

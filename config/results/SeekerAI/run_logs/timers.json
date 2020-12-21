@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1607972367",
+        "python_version": "3.7.9 (tags/v3.7.9:13c94747c7, Aug 17 2020, 18:58:18) [MSC v.1900 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\Marco\\AppData\\Local\\Programs\\Python\\Python37\\Scripts\\mlagents-learn Seeker.yaml --run-id=SeekerAI --resume",
+        "mlagents_version": "0.22.0",
+        "mlagents_envs_version": "0.22.0",
+        "communication_protocol_version": "1.2.0",
+        "pytorch_version": "1.7.0+cu110",
+        "numpy_version": "1.18.5",
+        "end_time_seconds": "1607972437"
+    },
+    "total": 69.64086660000001,
+    "count": 1,
+    "self": 0.27892200000000855,
+    "children": {
+        "run_training.setup": {
+            "total": 0.010183000000000053,
+            "count": 1,
+            "self": 0.010183000000000053
+        },
+        "TrainerController.start_learning": {
+            "total": 69.3517616,
+            "count": 1,
+            "self": 0.00026500000001306034,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 69.350932,
+                    "count": 1,
+                    "self": 69.350932
+                },
+                "TrainerController._save_models": {
+                    "total": 0.0005645999999899232,
+                    "count": 1,
+                    "self": 0.0005645999999899232
+                }
+            }
+        }
+    }
+}

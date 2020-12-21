@@ -58,25 +58,41 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\DeathAnimation.cs" />
-    <Compile Include="Assets\Scripts\ThreadManager.cs" />
-    <Compile Include="Assets\Scripts\ClientHandle.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\Monitor.cs" />
     <Compile Include="Assets\Scripts\AnimationStateController.cs" />
     <Compile Include="Assets\Scripts\InputManager.cs" />
-    <Compile Include="Assets\Scripts\UpdatePositionPacket.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\TargetContact.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\ObjectInfo.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\OrientationCubeController.cs" />
+    <Compile Include="Assets\Scripts\SeekerAgent\SeekerSettings.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\FlyCamera.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\GroundContact.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\ModelOverrider.cs" />
     <Compile Include="Assets\Scripts\Billboard.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\DirectionIndicator.cs" />
     <Compile Include="Assets\Scripts\CursorController.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
-    <Compile Include="Assets\Scripts\ClientConnection.cs" />
-    <Compile Include="Assets\Scripts\Packet.cs" />
-    <Compile Include="Assets\Scripts\ClientSend.cs" />
+    <Compile Include="Assets\Scripts\UnitAgent.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\SensorBase.cs" />
+    <Compile Include="Assets\Scripts\SeekerAgent\SeekerArea.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\Area.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\TargetController.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\JointDriveController.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\AdjustTrainingTimescale.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\ProjectSettingsOverrides.cs" />
+    <Compile Include="Assets\SharedAssets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\SeekerAgent\SeekerAgent.cs" />
+    <Compile Include="Assets\Scripts\SeekerAgent\PlayerLogic.cs" />
+    <Compile Include="Assets\Scripts\RuleBasedAI.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Samples\Terrain Tools\0.1.0-preview\Terrain Assets\ThirdPartyNotices.txt" />
      <None Include="Assets\low poly medieval buildings\readme.txt" />
+     <None Include="Assets\SharedAssets\Materials\GridPatternShader.shader" />
+     <None Include="Assets\SharedAssets\Materials\ShaderOutline.shader" />
      <None Include="Assets\read me.txt" />
+     <None Include="Assets\SharedAssets\Materials\ShaderRadialGrid.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.13f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -265,6 +281,24 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.13f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>Library\PackageCache\com.unity.barracuda@1.1.2-preview\Barracuda\Runtime\Plugins\ProtoBuffer\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.burst@1.3.4\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>C:\Users\Marco\Desktop\ml-agents-release_10\com.unity.ml-agents\Plugins\System.IO.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions.TestingHelpers">
+      <HintPath>C:\Users\Marco\Desktop\ml-agents-release_10\com.unity.ml-agents\Plugins\System.IO.Abstractions.TestingHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Grpc.Core">
+      <HintPath>C:\Users\Marco\Desktop\ml-agents-release_10\com.unity.ml-agents\Plugins\ProtoBuffer\Grpc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Async">
+      <HintPath>C:\Users\Marco\Desktop\ml-agents-release_10\com.unity.ml-agents\Plugins\ProtoBuffer\System.Interactive.Async.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.13f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -614,8 +648,20 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda.MacBLAS">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.MacBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
@@ -626,11 +672,26 @@
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.iOSBLAS">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.iOSBLAS.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda.BurstBLAS">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.BurstBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
@@ -638,8 +699,31 @@
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda.ONNX">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.ONNX.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Unity.ML-Agents.CommunicatorObjects.csproj">
+      <Project>{BF2708B1-E343-2681-CDA0-3BFB919BB125}</Project>
+      <Name>Unity.ML-Agents.CommunicatorObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Extensions.csproj">
+      <Project>{A5289999-68CB-AAD8-A33E-FF46325AB418}</Project>
+      <Name>Unity.ML-Agents.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Extensions.Editor.csproj">
+      <Project>{FBD20A5C-FCE9-6137-7D42-983DBC47E20C}</Project>
+      <Name>Unity.ML-Agents.Extensions.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Editor.csproj">
+      <Project>{3C0F2F0D-508F-E131-93C3-C42282EC31C4}</Project>
+      <Name>Unity.ML-Agents.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.csproj">
+      <Project>{E783881E-EE91-7942-5AFC-904C848AFF74}</Project>
+      <Name>Unity.ML-Agents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -9,7 +9,7 @@ public Transform cam;
     {
 		if (cam == null)
         {
-			cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponentInChildren<Camera>().transform;
+			cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         }
     }
 	void LateUpdate () {

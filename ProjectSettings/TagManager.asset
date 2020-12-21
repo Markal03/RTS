@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Selectable
   - Resource
+  - Environment
+  - Seeker
   layers:
   - Default
   - TransparentFX

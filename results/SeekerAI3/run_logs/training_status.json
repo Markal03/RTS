@@ -1,0 +1,24 @@
+{
+    "Seeker": {
+        "checkpoints": [
+            {
+                "steps": 14671,
+                "file_path": "results\\SeekerAI3\\Seeker\\Seeker-14671.onnx",
+                "reward": null,
+                "creation_time": 1607996226.725019
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 14671,
+            "file_path": "results\\SeekerAI3\\Seeker.onnx",
+            "reward": null,
+            "creation_time": 1607996226.725019
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.22.0",
+        "torch_version": "1.7.0+cu110",
+        "tensorflow_version": "2.3.1"
+    }
+}

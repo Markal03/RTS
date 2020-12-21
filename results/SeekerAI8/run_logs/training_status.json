@@ -1,0 +1,48 @@
+{
+    "Seeker": {
+        "checkpoints": [
+            {
+                "steps": 499947,
+                "file_path": "results\\SeekerAI8\\Seeker\\Seeker-499947.onnx",
+                "reward": -1.8317000225186348,
+                "creation_time": 1608132475.0869179
+            },
+            {
+                "steps": 999949,
+                "file_path": "results\\SeekerAI8\\Seeker\\Seeker-999949.onnx",
+                "reward": -0.11542858183383942,
+                "creation_time": 1608134525.9532247
+            },
+            {
+                "steps": 1499972,
+                "file_path": "results\\SeekerAI8\\Seeker\\Seeker-1499972.onnx",
+                "reward": -1.4789375332184136,
+                "creation_time": 1608136759.6821723
+            },
+            {
+                "steps": 1999966,
+                "file_path": "results\\SeekerAI8\\Seeker\\Seeker-1999966.onnx",
+                "reward": -0.5842000484466553,
+                "creation_time": 1608139069.317792
+            },
+            {
+                "steps": 2000030,
+                "file_path": "results\\SeekerAI8\\Seeker\\Seeker-2000030.onnx",
+                "reward": -0.5842000484466553,
+                "creation_time": 1608139069.5152652
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2000030,
+            "file_path": "results\\SeekerAI8\\Seeker.onnx",
+            "reward": -0.5842000484466553,
+            "creation_time": 1608139069.5152652
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.22.0",
+        "torch_version": "1.7.0+cu110",
+        "tensorflow_version": "2.3.1"
+    }
+}
