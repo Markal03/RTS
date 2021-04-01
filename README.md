@@ -11,3 +11,7 @@ The following screenshot displays the Ray Perception Sensor 3D in use by the AI 
 ![image](https://user-images.githubusercontent.com/26689191/113328578-66e75e00-9314-11eb-89f1-d1f1fd07329d.png)
 
 
+Another screenshot of the game from above:
+
+![image](https://user-images.githubusercontent.com/26689191/113329811-f3465080-9315-11eb-9d68-f9224583d8a5.png)
+
